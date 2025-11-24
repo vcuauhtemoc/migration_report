@@ -155,7 +155,6 @@ def generate_report(pre_dir,post_dir):
     print()
     now = dt.now()
     timestamp = int(now.timestamp())
-    print(timestamp)
     sa_df.to_csv(f"services_affected_{timestamp}.csv")
 
 def test():
