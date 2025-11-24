@@ -25,9 +25,9 @@ def main() -> None:
     args = parser.parse_args()
 
     if args.debug:
-        logging.basicConfig(level=logging.DEBUG)
+        logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     else:
-        logging.basicConfig(level=logging.INFO)
+        logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
     pre_dir = args.prefolder
     post_dir = args.postfolder
     generate_report(pre_dir,post_dir)
@@ -35,18 +35,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-    # test_dict = test()
-    # test_df = pd.DataFrame.from_dict(test_dict,orient='index')
-    # test_df.reset_index(drop=True)
-    # test_df.rename(
-    #     columns={
-    #     "ont_light_alert": "ONT Rx Level",
-    #     "olt_light_alert": "OLT Rx Level",
-    #     }
-    # )
-    # test_df.to_csv("test.csv")
-
-    # for svc, info in services_affected.items():
-    #     print(f"{svc}:")
-    #     for k,v in info.items():
-    #         print(f"{k}: {v}")
