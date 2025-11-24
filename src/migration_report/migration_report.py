@@ -152,7 +152,7 @@ def generate_report(pre_dir,post_dir):
     print(sa_df.to_markdown(tablefmt="rounded_outline"))
     print()
     now = dt.now()
-    timestamp = now.timestamp()
+    timestamp = int(now.timestamp())
     sa_df.to_csv(f"services_affected_{timestamp}.csv")
 
 def test():
