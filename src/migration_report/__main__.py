@@ -9,7 +9,7 @@ import argparse
 from .migration_report import *
 logger = logging.getLogger(__name__)
 
-if __name__ == "__main__":
+def main() -> None:
     parser = argparse.ArgumentParser(
         prog="Compare DIA analysis",
         description="""
@@ -31,6 +31,10 @@ if __name__ == "__main__":
     pre_dir = args.prefolder
     post_dir = args.postfolder
     generate_report(pre_dir,post_dir)
+
+
+if __name__ == "__main__":
+    main()
     # test_dict = test()
     # test_df = pd.DataFrame.from_dict(test_dict,orient='index')
     # test_df.reset_index(drop=True)
