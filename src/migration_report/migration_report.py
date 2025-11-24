@@ -6,6 +6,7 @@ import re
 from pprint import pprint
 import logging
 logger = logging.getLogger(__name__)
+from datetime import datetime as dt
 
 def parse_json(path) -> Union[dict,None]:
     result = {
@@ -150,7 +151,9 @@ def generate_report(pre_dir,post_dir):
     print()
     print(sa_df.to_markdown(tablefmt="rounded_outline"))
     print()
-    sa_df.to_csv("services_affected.csv")
+    now = dt.now()
+    timestamp = now.timestamp()
+    sa_df.to_csv(f"services_affected_{timestamp}.csv")
 
 def test():
     services = {}
