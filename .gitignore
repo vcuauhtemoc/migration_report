@@ -1,6 +1,7 @@
 src/migration_report/analyze/
 src/migration_report/pre/
 src/migration_report/post/
+dist/
 tests/
 poetry.lock
 sa.csv
@@ -8,5 +9,5 @@ services_affected.csv
 test.csv
 .DS_Store
 .vscode/
-/src/.DS_Store
-/src/migration_report/.DS_Store
+src/.DS_Store
+src/migration_report/.DS_Store
