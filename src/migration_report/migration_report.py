@@ -8,14 +8,16 @@ import logging
 logger = logging.getLogger(__name__)
 from datetime import datetime as dt
 
-def parse_json(path) -> Union[dict,None]:
+def parse_json(path: str) -> Union[dict,None]:
     result = {
+        "svc_id": "",
         "rx_olt": "",
         "rx_ont": "",
         "olt": "",
         "csw": "",
         "hosts": [],
     }
+
     with open(path) as j:
         try:
             service_dict = json.load(j)
@@ -29,6 +31,9 @@ def parse_json(path) -> Union[dict,None]:
             print("json contents:")
             print(service_dict)
             return None
+        svc_id_match = re.search(r"(\d+)\..+", path)
+        if svc_id_match:
+            result["svc_id"] = svc_id_match.group(1)
         result["rx_ont"] = service_dict["ont"]["UPLINK"]["GPON"]["ONT"]["Receive Power"]
         result["rx_olt"] = service_dict["ont"]["UPLINK"]["GPON"]["OLT"]["Receive Power"]
         result["olt"] = service_dict["olt"]["hostname"]
@@ -57,6 +62,26 @@ def parse_json(path) -> Union[dict,None]:
                 host["ip"] = "No IP found"
         result["csw"] = service_dict["olt"]["access_switch"]
         return result
+
+def get_arp_table(dir):
+    result = []
+    for file in os.listdir(dir):
+        analyze_service = parse_json(f"{dir}/{file}")
+        if analyze_service:
+            result.append(analyze_service)
+
+    result_df = pd.DataFrame.from_records(result)
+    result_df = result_df.explode("hosts")
+
+    result_df[["IP", "MAC", "VLAN", "interface"]] = result_df["hosts"].apply(
+        lambda d: pd.Series(
+            [d.get("ip"), d.get("mac"), d.get("vlan-id"), d.get("interface")]
+        ) if isinstance(d, dict) else pd.Series([None, None, None, None])
+    )
+    result_df.drop("hosts", axis=1, inplace=True)
+    result_df.fillna("N/A",inplace=True)   
+    return result_df
+
 
 
 def compare_result(pre: dict, post: dict,sid: str):

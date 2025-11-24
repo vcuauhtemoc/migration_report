@@ -19,8 +19,8 @@ def main() -> None:
         """
     )
 
-    parser.add_argument("prefolder", help="Path to pre-migration analyze-dia JSON files")
-    parser.add_argument("postfolder", help="Path to post-migration files")
+    parser.add_argument("folder", help="Path to pre-migration analyze-dia JSON files")
+    parser.add_argument("-p","--postfolder", help="Path to post-migration files")
     parser.add_argument("--debug",action="store_true",help="enable debug output")
     args = parser.parse_args()
 
@@ -28,9 +28,12 @@ def main() -> None:
         logging.basicConfig(level=logging.DEBUG, format="%(asctime)s - %(name)s - %(levelname)s - %(message)s")
     else:
         logging.basicConfig(level=logging.INFO, format="%(levelname)s - %(message)s")
-    pre_dir = args.prefolder
-    post_dir = args.postfolder
-    generate_report(pre_dir,post_dir)
+    pre_dir = args.folder
+    if args.postfolder:
+        post_dir = args.postfolder
+        generate_report(pre_dir,post_dir)
+    else:
+        print(get_arp_table(pre_dir).to_markdown(tablefmt="rounded_outline"))
 
 
 if __name__ == "__main__":
