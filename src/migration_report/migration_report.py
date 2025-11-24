@@ -75,11 +75,13 @@ def compare_result(pre: dict, post: dict,sid: str):
     if is_gpon:
         warn_low = gpon_warn_low
     try:
-        if (warn_low > int(post["rx_olt"])) or (int(post["rx_olt"]) > warn_high):
-            result["olt_light_alert"] = f"BAD ({post["rx_olt"]})"
+        rx_olt = int(post.get("rx_olt"))
+        rx_ont = int(post.get("rx_ont"))
+        if rx_olt < warn_low or rx_olt > warn_high:
+            result["olt_light_alert"] = f"BAD ({rx_olt})"
 
-        if (warn_low > int(post["rx_ont"])) or (int(post["rx_ont"]) > warn_high):
-            result["ont_light_alert"] = f"BAD ({post["rx_ont"]})"
+        if rx_ont < warn_low or rx_ont > warn_high:
+            result["ont_light_alert"] = f"BAD ({rx_ont})"
 
         hostlist = lambda hosts: [(h.get("ip"),h.get("mac")) for h in hosts]
         host_check_pre = hostlist(pre.get("hosts"))

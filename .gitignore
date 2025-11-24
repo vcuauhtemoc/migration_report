@@ -1,6 +1,7 @@
 src/migration_report/analyze/
 src/migration_report/pre/
 src/migration_report/post/
+src/migration_report/__pycache__
 dist/
 tests/
 poetry.lock
