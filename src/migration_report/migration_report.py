@@ -11,6 +11,7 @@ from datetime import datetime as dt
 def parse_json(path: str) -> Union[dict,None]:
     result = {
         "svc_id": "",
+        "ont_serial": "",
         "rx_olt": "",
         "rx_ont": "",
         "olt": "",
@@ -22,7 +23,7 @@ def parse_json(path: str) -> Union[dict,None]:
         try:
             service_dict = json.load(j)
         except Exception as ex:
-            print(f"Not a JSON:{ex.args[0]}")
+            print(f"{path} Not a JSON:{ex.args[0]}")
             return None
         try:
             service_dict = service_dict[0]
@@ -34,6 +35,7 @@ def parse_json(path: str) -> Union[dict,None]:
         svc_id_match = re.search(r"(\d+)\..+", path)
         if svc_id_match:
             result["svc_id"] = svc_id_match.group(1)
+        result["ont_serial"] = service_dict["ont"]["serial"]
         result["rx_ont"] = service_dict["ont"]["UPLINK"]["GPON"]["ONT"]["Receive Power"]
         result["rx_olt"] = service_dict["ont"]["UPLINK"]["GPON"]["OLT"]["Receive Power"]
         result["olt"] = service_dict["olt"]["hostname"]
